@@ -89,7 +89,12 @@
           placeholder="Digite o username..."
           [(ngModel)]="newUsername"
           (keyup.enter)="saveProspect()"
+          [disabled]="isLoading"
         />
+        <!-- Mensagem de erro -->
+        @if (errorMessage) {
+        <span class="error-message">{{ errorMessage }}</span>
+        }
       </div>
 
       <!-- Rodapé do modal com botão salvar -->
@@ -97,9 +102,9 @@
         <button
           class="save-button"
           (click)="saveProspect()"
-          [disabled]="!newUsername.trim()"
+          [disabled]="!newUsername.trim() || isLoading"
         >
-          Salvar
+          {{ isLoading ? "Salvando..." : "Salvar" }}
         </button>
       </div>
     </div>

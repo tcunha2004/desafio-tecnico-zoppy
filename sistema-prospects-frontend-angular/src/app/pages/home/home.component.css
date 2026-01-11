@@ -290,6 +290,15 @@ swiper-container::part(button-next) {
 }
 
 /* ============================================
+   MODAL - Mensagem de erro
+   ============================================ */
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* ============================================
    MODAL - Rodapé
    ============================================ */
 .modal-footer {

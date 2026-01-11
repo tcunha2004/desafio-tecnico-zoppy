@@ -1,6 +1,7 @@
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
+  OnInit,
   AfterViewInit,
   ElementRef,
   ViewChild,
@@ -12,19 +13,11 @@ import { Router } from '@angular/router';
 // Importação do Swiper e seus módulos
 import { register } from 'swiper/element/bundle';
 
+// Serviço de prospects
+import { ProspectsService, Prospect } from '../../services/prospects.service';
+
 // Registra os elementos customizados do Swiper globalmente
 register();
-
-/* ============================================
-   INTERFACE - Definição do tipo Prospect
-   ============================================ */
-interface Prospect {
-  name: string;
-  username: string;
-  avatarUrl: string;
-  bio?: string;
-  email?: string;
-}
 
 @Component({
   selector: 'app-home',
@@ -35,7 +28,7 @@ interface Prospect {
   // Schema necessário para usar elementos customizados do Swiper
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class HomeComponent implements AfterViewInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   // Referência ao elemento Swiper no template
   @ViewChild('swiperContainer') swiperContainer!: ElementRef;
 
@@ -44,6 +37,8 @@ export class HomeComponent implements AfterViewInit {
      ============================================ */
   isModalOpen: boolean = false;
   newUsername: string = '';
+  isLoading: boolean = false;
+  errorMessage: string = '';
 
   /* ============================================
      ESTADO DO MODAL - Detalhes do Prospect
@@ -52,70 +47,84 @@ export class HomeComponent implements AfterViewInit {
   selectedProspect: Prospect | null = null;
 
   /* ============================================
-     DADOS - Lista de prospects para exibição
+     DADOS - Lista de prospects do banco
      ============================================ */
-  prospects: Prospect[] = [
-    {
-      name: 'Thiago Cunha',
-      username: 'tcunha2004',
-      avatarUrl: 'https://github.com/tcunha2004.png',
-      bio: 'Desenvolvedor Full Stack apaixonado por tecnologia e inovação.',
-      email: 'thiago.cunha@email.com',
-    },
-    {
-      name: 'Arturs Smirnovs',
-      username: 'arturssmirnovs',
-      avatarUrl: 'https://github.com/arturssmirnovs.png',
-      bio: 'Software Engineer | Open Source Enthusiast',
-      email: 'arturs@email.com',
-    },
-    {
-      name: 'Thiago Cunha',
-      username: 'tcunha2004',
-      avatarUrl: 'https://github.com/tcunha2004.png',
-      bio: 'Desenvolvedor Full Stack apaixonado por tecnologia e inovação.',
-      email: 'thiago.cunha@email.com',
-    },
-    {
-      name: 'Arturs Smirnovs',
-      username: 'arturssmirnovs',
-      avatarUrl: 'https://github.com/arturssmirnovs.png',
-      bio: 'Software Engineer | Open Source Enthusiast',
-      email: 'arturs@email.com',
-    },
-  ];
+  prospects: Prospect[] = [];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private prospectsService: ProspectsService
+  ) {}
+
+  /* ============================================
+     LIFECYCLE - Carrega dados ao iniciar
+     ============================================ */
+  ngOnInit(): void {
+    this.loadProspects();
+  }
 
   ngAfterViewInit(): void {
     // Configuração do Swiper após a view ser inicializada
-    const swiperEl = this.swiperContainer.nativeElement;
+    this.initSwiper();
+  }
 
-    // Parâmetros do Swiper
-    const swiperParams = {
-      slidesPerView: 2,
-      spaceBetween: 32,
-      navigation: true,
-      injectStyles: [
-        `
-        .swiper-button-prev,
-        .swiper-button-next {
-          color: white;
-          width: 2.75rem;
-          height: 2.75rem;
-        }
-        .swiper-button-prev::after,
-        .swiper-button-next::after {
-          font-size: 1.1rem;
-          font-weight: 700;
-        }
-        `,
-      ],
-    };
+  /* ============================================
+     SWIPER - Inicializa o carousel
+     ============================================ */
+  private initSwiper(): void {
+    setTimeout(() => {
+      const swiperEl = this.swiperContainer?.nativeElement;
+      if (swiperEl) {
+        const swiperParams = {
+          slidesPerView: 2,
+          spaceBetween: 32,
+          navigation: true,
+          injectStyles: [
+            `
+            .swiper-button-prev,
+            .swiper-button-next {
+              color: white;
+              width: 2.75rem;
+              height: 2.75rem;
+            }
+            .swiper-button-prev::after,
+            .swiper-button-next::after {
+              font-size: 1.1rem;
+              font-weight: 700;
+            }
+            `,
+          ],
+        };
+        Object.assign(swiperEl, swiperParams);
+        swiperEl.initialize();
+      }
+    }, 100);
+  }
 
-    // Atribui os parâmetros e inicializa o Swiper
-    Object.assign(swiperEl, swiperParams);
-    swiperEl.initialize();
+  /* ============================================
+     API - Carrega prospects do banco de dados
+     ============================================ */
+  loadProspects(): void {
+    this.prospectsService.getAll().subscribe({
+      next: (data) => {
+        this.prospects = data;
+        // Reinicializa o Swiper após carregar os dados
+        setTimeout(() => this.updateSwiper(), 100);
+      },
+      error: (err) => {
+        console.error('Erro ao carregar prospects:', err);
+      },
+    });
+  }
+
+  /* ============================================
+     SWIPER - Atualiza após mudanças nos dados
+     ============================================ */
+  private updateSwiper(): void {
+    const swiperEl = this.swiperContainer?.nativeElement;
+    if (swiperEl?.swiper) {
+      swiperEl.swiper.update();
+    }
   }
 
   /* ============================================
@@ -131,6 +140,7 @@ export class HomeComponent implements AfterViewInit {
   openModal(): void {
     this.isModalOpen = true;
     this.newUsername = '';
+    this.errorMessage = '';
   }
 
   /* ============================================
@@ -139,10 +149,12 @@ export class HomeComponent implements AfterViewInit {
   closeModal(): void {
     this.isModalOpen = false;
     this.newUsername = '';
+    this.errorMessage = '';
+    this.isLoading = false;
   }
 
   /* ============================================
-     MODAL DETALHES - Abre o modal com detalhes do prospect
+     MODAL DETALHES - Abre o modal com detalhes
      ============================================ */
   openDetailsModal(prospect: Prospect): void {
     this.selectedProspect = prospect;
@@ -158,15 +170,36 @@ export class HomeComponent implements AfterViewInit {
   }
 
   /* ============================================
-     MODAL - Salva o novo prospect
-     (Por enquanto apenas fecha o modal - design only)
+     API - Salva novo prospect no banco
      ============================================ */
   saveProspect(): void {
-    if (this.newUsername.trim()) {
-      // TODO: Implementar lógica de salvar prospect futuramente
+    if (!this.newUsername.trim() || this.isLoading) return;
 
-      // Fecha o modal
-      this.closeModal();
-    }
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.prospectsService
+      .create({ username: this.newUsername.trim() })
+      .subscribe({
+        next: (newProspect) => {
+          // Adiciona o novo prospect à lista
+          this.prospects.unshift(newProspect);
+          // Atualiza o Swiper
+          setTimeout(() => this.updateSwiper(), 100);
+          // Fecha o modal
+          this.closeModal();
+        },
+        error: (err) => {
+          this.isLoading = false;
+          // Exibe mensagem de erro
+          if (err.status === 404) {
+            this.errorMessage = 'Usuário não encontrado no GitHub';
+          } else if (err.status === 409) {
+            this.errorMessage = 'Este prospect já está cadastrado';
+          } else {
+            this.errorMessage = 'Erro ao adicionar prospect. Tente novamente.';
+          }
+        },
+      });
   }
 }

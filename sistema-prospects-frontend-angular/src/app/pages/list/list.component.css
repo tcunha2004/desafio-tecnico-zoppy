@@ -106,6 +106,72 @@
   font-weight: 600;
   font-size: 1.25rem;
   letter-spacing: 0.2px;
+  flex: 1;
+}
+
+/* ============================================
+   BOTÕES DE AÇÃO (Editar/Excluir/Refresh)
+   ============================================ */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.action-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 150ms ease, background 150ms ease, opacity 150ms ease;
+  opacity: 0.7;
+}
+
+.action-btn:hover {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.refresh-btn {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+.refresh-btn:hover {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+.edit-btn {
+  background: rgba(240, 81, 51, 0.2);
+  color: var(--color-orange);
+}
+
+.edit-btn:hover {
+  background: rgba(240, 81, 51, 0.3);
+}
+
+.delete-btn {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+/* ============================================
+   ESTADOS - Loading e Vazio
+   ============================================ */
+.loading,
+.empty-state {
+  color: var(--color-gray);
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.1rem;
 }
 
 /* ============================================
@@ -258,4 +324,237 @@
 .details-email svg {
   color: var(--color-orange);
   flex-shrink: 0;
+}
+
+/* ============================================
+   MODAL DETALHES - Item genérico
+   ============================================ */
+.details-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-gray);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-blue-700);
+  border-radius: 12px;
+}
+
+.details-item svg {
+  color: var(--color-orange);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   MODAL DETALHES - Estatísticas
+   ============================================ */
+.details-stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.stat strong {
+  color: var(--color-white);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.stat span {
+  color: var(--color-gray);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   MODAL EDITAR - Estilos específicos
+   ============================================ */
+.edit-modal {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+  color: var(--color-white);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: var(--color-gray);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.modal-input {
+  width: 100%;
+  height: 3rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--color-blue-700);
+  padding: 0 1rem;
+  color: var(--color-white);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.modal-input::placeholder {
+  color: var(--color-gray);
+}
+
+.modal-input:focus {
+  border-color: rgba(240, 81, 51, 0.4);
+  box-shadow: 0 0 0 4px rgba(240, 81, 51, 0.1);
+}
+
+.modal-textarea {
+  height: auto;
+  padding: 0.75rem 1rem;
+  resize: vertical;
+  min-height: 5rem;
+  font-family: inherit;
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.modal-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.cancel-button {
+  height: 2.75rem;
+  padding: 0 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: var(--color-gray);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 200ms, background 200ms, border-color 200ms;
+}
+
+.cancel-button:hover {
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.save-button {
+  height: 2.75rem;
+  padding: 0 1.5rem;
+  border-radius: 12px;
+  border: none;
+  background: var(--color-orange);
+  color: var(--color-white);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 150ms ease, filter 150ms ease;
+}
+
+.save-button:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.save-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   MODAL EXCLUIR - Estilos específicos
+   ============================================ */
+.delete-modal {
+  text-align: center;
+  padding: 2.5rem 2rem;
+}
+
+.delete-icon {
+  color: #ef4444;
+  margin-bottom: 1rem;
+}
+
+.delete-title {
+  color: var(--color-white);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+}
+
+.delete-message {
+  color: var(--color-gray);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.delete-message strong {
+  color: var(--color-orange);
+}
+
+.delete-modal .modal-footer {
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.delete-confirm-button {
+  height: 2.75rem;
+  padding: 0 1.5rem;
+  border-radius: 12px;
+  border: none;
+  background: #ef4444;
+  color: var(--color-white);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 150ms ease, filter 150ms ease;
+}
+
+.delete-confirm-button:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.delete-confirm-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

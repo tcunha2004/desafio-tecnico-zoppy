@@ -25,6 +25,7 @@
       class="search-input"
       placeholder="Digite o nome do usuário..."
       [(ngModel)]="searchQuery"
+      (input)="filterProspects()"
     />
   </div>
 
@@ -32,7 +33,17 @@
        LISTA DE PROSPECTS
        ============================================ -->
   <div class="prospects-list">
-    @for (prospect of prospects; track prospect.username) {
+    @if (isLoading) {
+    <div class="loading">Carregando...</div>
+    } @else if (prospects.length === 0) {
+    <div class="empty-state">
+      @if (searchQuery) {
+      <p>Nenhum prospect encontrado para "{{ searchQuery }}"</p>
+      } @else {
+      <p>Nenhum prospect cadastrado</p>
+      }
+    </div>
+    } @else { @for (prospect of prospects; track prospect.id) {
     <div class="prospect-card" (click)="openDetailsModal(prospect)">
       <!-- Avatar do usuário -->
       <div class="avatar">
@@ -44,8 +55,50 @@
 
       <!-- Nome de usuário -->
       <span class="username">{{ prospect.username }}</span>
+
+      <!-- Botões de ação -->
+      <div class="action-buttons">
+        <!-- Botão Sincronizar com GitHub -->
+        <button
+          class="action-btn refresh-btn"
+          (click)="refreshProspect(prospect, $event)"
+          title="Sincronizar dados do GitHub"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+            <path
+              d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"
+            />
+          </svg>
+        </button>
+
+        <!-- Botão Editar -->
+        <button
+          class="action-btn edit-btn"
+          (click)="openEditModal(prospect, $event)"
+          title="Editar prospect"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+            <path
+              d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+            />
+          </svg>
+        </button>
+
+        <!-- Botão Excluir -->
+        <button
+          class="action-btn delete-btn"
+          (click)="openDeleteModal(prospect, $event)"
+          title="Excluir prospect"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+            <path
+              d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
-    }
+    } }
   </div>
 
   <!-- ============================================
@@ -79,10 +132,13 @@
         >
 
         <!-- Bio -->
+        @if (selectedProspect.bio) {
         <p class="details-bio">{{ selectedProspect.bio }}</p>
+        }
 
         <!-- Email -->
-        <div class="details-email">
+        @if (selectedProspect.email) {
+        <div class="details-item">
           <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
             <path
               d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
@@ -90,6 +146,185 @@
           </svg>
           <span>{{ selectedProspect.email }}</span>
         </div>
+        }
+
+        <!-- Localização -->
+        @if (selectedProspect.location) {
+        <div class="details-item">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+            />
+          </svg>
+          <span>{{ selectedProspect.location }}</span>
+        </div>
+        }
+
+        <!-- Empresa -->
+        @if (selectedProspect.company) {
+        <div class="details-item">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+            <path
+              d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
+            />
+          </svg>
+          <span>{{ selectedProspect.company }}</span>
+        </div>
+        }
+
+        <!-- Estatísticas -->
+        <div class="details-stats">
+          <div class="stat">
+            <strong>{{ selectedProspect.publicRepos || 0 }}</strong>
+            <span>Repositórios</span>
+          </div>
+          <div class="stat">
+            <strong>{{ selectedProspect.followers || 0 }}</strong>
+            <span>Seguidores</span>
+          </div>
+          <div class="stat">
+            <strong>{{ selectedProspect.following || 0 }}</strong>
+            <span>Seguindo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- ============================================
+       MODAL - Editar Prospect
+       ============================================ -->
+  @if (isEditModalOpen && editingProspect) {
+  <div class="modal-overlay" (click)="closeEditModal()">
+    <div class="modal-content edit-modal" (click)="$event.stopPropagation()">
+      <!-- Cabeçalho do modal -->
+      <div class="modal-header">
+        <h2>Editar Prospect</h2>
+        <button class="close-button" (click)="closeEditModal()">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path
+              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Corpo do modal -->
+      <div class="modal-body">
+        <!-- Nome -->
+        <div class="form-group">
+          <label for="edit-name">Nome</label>
+          <input
+            type="text"
+            id="edit-name"
+            class="modal-input"
+            [(ngModel)]="editingProspect.name"
+          />
+        </div>
+
+        <!-- Bio -->
+        <div class="form-group">
+          <label for="edit-bio">Bio</label>
+          <textarea
+            id="edit-bio"
+            class="modal-input modal-textarea"
+            [(ngModel)]="editingProspect.bio"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="edit-email">Email</label>
+          <input
+            type="email"
+            id="edit-email"
+            class="modal-input"
+            [(ngModel)]="editingProspect.email"
+          />
+        </div>
+
+        <!-- Localização -->
+        <div class="form-group">
+          <label for="edit-location">Localização</label>
+          <input
+            type="text"
+            id="edit-location"
+            class="modal-input"
+            [(ngModel)]="editingProspect.location"
+          />
+        </div>
+
+        <!-- Empresa -->
+        <div class="form-group">
+          <label for="edit-company">Empresa</label>
+          <input
+            type="text"
+            id="edit-company"
+            class="modal-input"
+            [(ngModel)]="editingProspect.company"
+          />
+        </div>
+
+        <!-- Mensagem de erro -->
+        @if (updateErrorMessage) {
+        <span class="error-message">{{ updateErrorMessage }}</span>
+        }
+      </div>
+
+      <!-- Rodapé do modal -->
+      <div class="modal-footer">
+        <button class="cancel-button" (click)="closeEditModal()">
+          Cancelar
+        </button>
+        <button
+          class="save-button"
+          (click)="updateProspect()"
+          [disabled]="isUpdating"
+        >
+          {{ isUpdating ? "Salvando..." : "Salvar" }}
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- ============================================
+       MODAL - Confirmar Exclusão
+       ============================================ -->
+  @if (isDeleteModalOpen && deletingProspect) {
+  <div class="modal-overlay" (click)="closeDeleteModal()">
+    <div class="modal-content delete-modal" (click)="$event.stopPropagation()">
+      <!-- Ícone de alerta -->
+      <div class="delete-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48">
+          <path
+            d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+          />
+        </svg>
+      </div>
+
+      <!-- Mensagem de confirmação -->
+      <h2 class="delete-title">Excluir Prospect</h2>
+      <p class="delete-message">
+        Tem certeza que deseja excluir o prospect
+        <strong>{{ deletingProspect.username }}</strong
+        >? Esta ação não pode ser desfeita.
+      </p>
+
+      <!-- Botões -->
+      <div class="modal-footer">
+        <button class="cancel-button" (click)="closeDeleteModal()">
+          Cancelar
+        </button>
+        <button
+          class="delete-confirm-button"
+          (click)="confirmDelete()"
+          [disabled]="isDeleting"
+        >
+          {{ isDeleting ? "Excluindo..." : "Excluir" }}
+        </button>
       </div>
     </div>
   </div>
