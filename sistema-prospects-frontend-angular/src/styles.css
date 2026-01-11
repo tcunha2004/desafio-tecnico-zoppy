@@ -1,0 +1,33 @@
+/* ============================================
+   ESTILOS GLOBAIS - Sistema de Gestão de Prospects
+   ============================================ */
+
+/* Importação da fonte Inter do Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* ============================================
+   VARIÁVEIS CSS (Equivalente ao defaultTheme do React)
+   ============================================ */
+:root {
+  --color-white: #fff;
+  --color-orange: #f05133;
+  --color-gray: #b4b4b4;
+  --color-blue-700: #020408;
+  --color-blue-300: #0c1117;
+}
+
+/* ============================================
+   RESET E ESTILOS BASE
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100vh;
+}
