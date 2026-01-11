@@ -77,6 +77,40 @@ swiper-container::part(button-next) {
 }
 
 /* ============================================
+   ESTADO VAZIO - Nenhum prospect
+   ============================================ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 21rem;
+  color: var(--color-gray);
+  text-align: center;
+  gap: 1rem;
+  padding: 2rem;
+  border-radius: 16px;
+  background: var(--color-blue-300);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.26);
+}
+
+.empty-state svg {
+  opacity: 0.5;
+}
+
+.empty-state p {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: 0;
+  color: var(--color-white);
+}
+
+.empty-hint {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* ============================================
    CARD DO PROSPECT
    ============================================ */
 .prospect-card {

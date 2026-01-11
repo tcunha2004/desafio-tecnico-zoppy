@@ -24,6 +24,20 @@
        CAROUSEL - Swiper com cards de prospects
        ============================================ -->
   <div class="carousel-container">
+    @if (prospects.length === 0) {
+    <!-- Estado vazio - Nenhum prospect cadastrado -->
+    <div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48">
+        <path
+          d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+        />
+      </svg>
+      <p>Nenhum prospect adicionado no momento</p>
+      <span class="empty-hint"
+        >Clique no botão + para adicionar seu primeiro prospect</span
+      >
+    </div>
+    } @else {
     <swiper-container #swiperContainer init="false">
       <!-- Iteração sobre a lista de prospects -->
       @for (prospect of prospects; track $index) {
@@ -47,6 +61,7 @@
       </swiper-slide>
       }
     </swiper-container>
+    }
 
     <!-- Link para ver lista completa -->
     <span class="navigate" (click)="navigateToList()">Ver lista completa</span>
