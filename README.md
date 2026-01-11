@@ -1,48 +1,48 @@
-# Sistema de Gestão de Prospects Desenvolvedores
+# Sistema de Gestão de Prospects (MVP Frontend em React)
 
-## 📋 Sobre o Projeto
+Este repositório contém uma **versão MVP (prova de conceito)** do frontend do “Sistema de Gestão de Prospects Desenvolvedores”, criada como parte de um **teste técnico para vaga de emprego**.
 
-Sistema web para gestão de prospects desenvolvedores, permitindo que empresas e recrutadores organizem e acompanhem candidatos em potencial através de seus perfis do GitHub. A aplicação oferece uma interface moderna e intuitiva para adicionar, visualizar, editar e remover prospects de forma eficiente.
+O enunciado original do desafio previa **Angular 19 no frontend** e **NestJS + MySQL no backend**. Antes de iniciar a versão completa, optei por construir primeiro um **MVP em React** (por ter mais familiaridade), para validar a interface, navegação e a experiência do usuário.
 
-## ✨ Funcionalidades
+## 🎯 Objetivo do MVP
 
-- **Adicionar Prospects**: Cadastre desenvolvedores através do username do GitHub
-- **Listar Prospects**: Visualize todos os prospects cadastrados em um carrossel interativo e em lista completa
-- **Buscar Prospects**: Encontre rapidamente prospects através da busca por username
-- **Editar Informações**: Atualize dados dos prospects salvos
-- **Remover Prospects**: Delete prospects que não são mais relevantes
-- **Integração GitHub API**: Busca automática de informações do perfil do desenvolvedor
+- Validar o fluxo principal de navegação e layout (Dashboard + Lista)
+- Prototipar o carrossel de prospects e a tela de listagem
+- Criar uma base sólida para evoluir com integração à API do GitHub e backend
 
-## 🛠️ Stack Tecnológica
+## ✅ O que está implementado (estado atual)
 
-### Backend
-- **Node.js** com **NestJS 10.x**
-- **MySQL** para persistência de dados
-- **TypeORM** para gerenciamento do banco de dados
-- **API REST** para comunicação
+- **2 telas principais**
+  - **Home/Dashboard** com carrossel de prospects
+  - **Lista completa** com campo de busca (UI)
+- **Rotas** com React Router
+- **UI moderna** usando Styled Components
 
-### Frontend
-- **Angular 19**
-- **TypeScript**
-- **Tailwind CSS** para estilização
-- **RxJS** para programação reativa
+> Observação: neste momento o MVP utiliza **dados mockados (estáticos)** nas telas. A integração real (GitHub API + persistência/CRUD) fica como evolução.
 
-## 📝 Requisitos do Desafio
+## 🧩 Escopo do desafio (referência)
 
-Este projeto foi desenvolvido como resposta ao desafio técnico com os seguintes requisitos:
+O sistema trata prospects desenvolvedores como “clientes” em potencial para empresas de tecnologia, facilitando o acompanhamento de candidatos via perfis do GitHub.
 
-- ✅ Backend construído com **Node.js** e **NestJS 10.x**
-- ✅ Frontend construído com **Angular 19**
-- ✅ Persistência de dados em banco relacional (**MySQL**)
-- ✅ Implementação completa de **CRUD** (Create, Read, Update, Delete)
-- ✅ Tema escolhido: **Clientes** (Prospects Desenvolvedores)
-- ✅ Mínimo de **duas telas**: Dashboard com carrossel e Lista completa com busca
-- ✅ Interface web moderna e responsiva
+Funcionalidades esperadas na versão completa:
 
-## 🎯 Tema: Clientes (Prospects)
+- Adicionar prospect por username do GitHub
+- Listar prospects (carrossel + lista)
+- Buscar prospect por username
+- Editar informações salvas
+- Remover prospects
+- Integrar com GitHub API
+- Persistir em banco relacional (ex.: MySQL)
 
-O sistema trata prospects desenvolvedores como "clientes" em potencial para empresas de tecnologia, facilitando o processo de recrutamento e gestão de talentos através da organização de perfis do GitHub.
+## 🛠️ Stack do MVP (frontend)
+
+- React 19 + TypeScript
+- Vite
+- React Router
+- Styled Components
+- Swiper (carrossel)
+- React Icons
 
 ---
 
-**Desenvolvido como parte do desafio técnico para vaga de Desenvolvedor Full Stack Júnior**
+**MVP desenvolvido como parte de um desafio técnico (Full Stack Júnior).**
