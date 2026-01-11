@@ -4,6 +4,10 @@
 
 Sistema web para gestão de prospects desenvolvedores, permitindo que empresas e recrutadores organizem e acompanhem candidatos em potencial através de seus perfis do GitHub. A aplicação oferece uma interface moderna e intuitiva para adicionar, visualizar, editar e remover prospects de forma eficiente.
 
+## 🎨 Template no Figma
+
+Acesse o design do projeto no Figma: [Desafio Zoppy - Figma](https://www.figma.com/site/xW8NRVPfReJTAakGgIbpN0/desafio-zoppy?node-id=0-1&t=PZIHekBVEvVgdx65-1)
+
 ## ✨ Funcionalidades
 
 - **Adicionar Prospects**: Cadastre desenvolvedores através do username do GitHub
