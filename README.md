@@ -194,7 +194,6 @@ desafio-tecnico-zoppy/
 | ---------- | ---------------------------------- |
 | `ng serve` | Roda o servidor de desenvolvimento |
 | `ng build` | Compila para produção              |
-| `ng test`  | Roda os testes unitários           |
 
 ---
 
