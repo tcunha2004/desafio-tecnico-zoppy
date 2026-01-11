@@ -178,14 +178,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.errorMessage = '';
 
+    const isFirstProspect = this.prospects.length === 0;
+
     this.prospectsService
       .create({ username: this.newUsername.trim() })
       .subscribe({
         next: (newProspect) => {
           // Adiciona o novo prospect à lista
           this.prospects.unshift(newProspect);
-          // Atualiza o Swiper
-          setTimeout(() => this.updateSwiper(), 100);
+
+          // Se for o primeiro prospect, inicializa o Swiper
+          // Caso contrário, apenas atualiza
+          if (isFirstProspect) {
+            setTimeout(() => this.initSwiper(), 150);
+          } else {
+            setTimeout(() => this.updateSwiper(), 100);
+          }
+
           // Fecha o modal
           this.closeModal();
         },
